@@ -2,6 +2,7 @@ using LMS.Assessment.Api.Abstractions;
 using LMS.Assessment.Api.Controllers;
 using LMS.Assessment.Api.Entities;
 using LMS.Assessment.Api.Infrastructure;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LMS.Assessment.Tests;
@@ -23,7 +24,15 @@ public class LawFirmsControllerTests
         foreach (var firm in seed)
             await repo.CreateAsync(firm);
 
-        return new LawFirmsController(repo);
+        var controller = new LawFirmsController(repo)
+        {
+            ControllerContext = new ControllerContext()
+        };
+
+        controller.ControllerContext.HttpContext = new DefaultHttpContext();
+        controller.ControllerContext.HttpContext.Request.Headers.Append("X-User-Id", Guid.NewGuid().ToString());
+
+        return controller;
     }
 
     #region GetAll
