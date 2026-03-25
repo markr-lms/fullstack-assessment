@@ -10,6 +10,7 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 builder.Services.AddSingleton<IRepository<LawFirm>, InMemoryRepository<LawFirm>>();
+builder.Services.AddSingleton<IRepository<Document>, InMemoryRepository<Document>>();
 
 var app = builder.Build();
 
