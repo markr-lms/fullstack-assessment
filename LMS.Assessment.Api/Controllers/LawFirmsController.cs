@@ -30,8 +30,11 @@ public class LawFirmsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(LawFirm lawFirm)
+    public async Task<IActionResult> Create(HttpRequest request, LawFirm lawFirm)
     {
+        var userAgent = request.Headers.UserAgent;
+        var customHeader = request.Headers["x-username"];
+
         var created = await _repository.CreateAsync(lawFirm);
         return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
     }
