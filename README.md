@@ -1,5 +1,7 @@
 # LMS.Assessment.Api
 
+An API for managing law firm details.
+
 ## Setup
 
 - Run API
