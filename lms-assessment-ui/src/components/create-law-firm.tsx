@@ -2,7 +2,9 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import type { CreateLawFirmRequest } from "../types/law-firm-types";
+import type { CreateLawFirmRequest } from "~/types/law-firm-types";
+import useApi from "~/hooks/useApi";
+import { useMutation } from "@tanstack/react-query";
 
 const validationSchema = yup.object({
   name: yup.string().trim().required().min(1).max(50),
@@ -12,6 +14,12 @@ const validationSchema = yup.object({
 });
 
 const CreateLawFirmForm = () => {
+  const { createLawFirm } = useApi();
+
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: (values: CreateLawFirmRequest) => createLawFirm(values),
+  });
+
   const form = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -21,7 +29,7 @@ const CreateLawFirmForm = () => {
       email: "",
     },
     validationSchema: validationSchema,
-    onSubmit: async (values: CreateLawFirmRequest) => await createTask(values),
+    onSubmit: async (values: CreateLawFirmRequest) => await mutateAsync(values),
   });
 
   return (
@@ -37,8 +45,15 @@ const CreateLawFirmForm = () => {
           onBlur={form.handleBlur}
           error={form.touched.email && Boolean(form.errors.email)}
           helperText={form.touched.email && form.errors.email}
+          disabled={isPending}
         />
-        <Button color="primary" variant="contained" fullWidth type="submit">
+        <Button
+          color="primary"
+          variant="contained"
+          fullWidth
+          type="submit"
+          disabled={isPending}
+        >
           Submit
         </Button>
       </form>

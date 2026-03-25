@@ -1,29 +1,12 @@
-import Button from "@mui/material/Button";
-import Container from "@mui/material/Container";
-import Divider from "@mui/material/Divider";
-import Stack from "@mui/material/Stack";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import Homepage from "./components/homepage";
 
-function App() {
-  const handleAdd = () => console.log("todo");
+const queryClient = new QueryClient();
 
+export function App() {
   return (
-    <Container maxWidth="md">
-      <header>
-        <h1>LMS.Assessment</h1>
-      </header>
-      <Stack component="main" spacing={2}>
-        <section id="add-firm">
-          <Button variant="contained" onClick={handleAdd}>
-            Add Law Firm
-          </Button>
-        </section>
-        <Divider />
-        <section id="list-firms">
-          <h2>List of Law Firms</h2>
-        </section>
-      </Stack>
-    </Container>
+    <QueryClientProvider client={queryClient}>
+      <Homepage />
+    </QueryClientProvider>
   );
 }
-
-export default App;

@@ -1,11 +1,11 @@
 import axios from "axios";
 import type { PaginatedList } from "~/types/common-types";
-import type { LawFirm } from "~/types/law-firm-types";
+import type { CreateLawFirmRequest, LawFirm } from "~/types/law-firm-types";
 
 export type IApi = ReturnType<typeof useApi>;
 
 export default function useApi() {
-  const apiBaseAddress = "";
+  const apiBaseAddress = "http://localhost:5013";
 
   const config = {
     headers: {
@@ -21,6 +21,15 @@ export default function useApi() {
         `&pageSize=${pageSize}`;
 
       const { data } = await axios.get<PaginatedList<LawFirm>>(url, config);
+      return data;
+    },
+
+    createLawFirm: async (request: CreateLawFirmRequest) => {
+      const { data } = await axios.post<LawFirm>(
+        `${apiBaseAddress}/lawfirms`,
+        request,
+        config,
+      );
       return data;
     },
   };
