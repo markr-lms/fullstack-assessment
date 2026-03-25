@@ -18,4 +18,8 @@
     <Using Include="Xunit" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\LMS.Assessment.Api\LMS.Assessment.Api.csproj" />
+  </ItemGroup>
+
 </Project>
