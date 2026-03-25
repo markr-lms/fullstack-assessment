@@ -6,7 +6,10 @@ namespace LMS.Assessment.Tests;
 public class InMemoryRepositoryTests
 {
     // Minimal implementation used across all tests
-    private record TestEntity(string Id, string Value) : IEntity;
+    private record TestEntity(string Id, string Value) : IEntity
+    {
+        public DateTime CreatedAt { get; init; } = DateTime.UtcNow;
+    }
 
     private static async Task<InMemoryRepository<TestEntity>> CreateRepo(
         params TestEntity[] seed)

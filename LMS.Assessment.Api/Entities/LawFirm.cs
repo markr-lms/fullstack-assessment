@@ -7,4 +7,7 @@ public record LawFirm(
     string Name,
     string Address,
     string PhoneNumber,
-    string Email) : IEntity;
+    string Email) : IEntity
+{
+    public DateTime CreatedAt { get; init; } = DateTime.UtcNow;
+}
