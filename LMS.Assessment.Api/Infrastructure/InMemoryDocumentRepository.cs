@@ -14,9 +14,14 @@ public class InMemoryDocumentRepository<T> : IDocumentRepository<T> where T : ID
         return Task.FromResult(document);
     }
 
-    public Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken = default)
+    public Task<PagedResult<T>> GetAllAsync(int pageNumber = 1, int pageSize = 20, CancellationToken cancellationToken = default)
     {
-        return Task.FromResult<IEnumerable<T>>(_store.Values.ToList());
+        if (pageNumber < 1) throw new ArgumentOutOfRangeException(nameof(pageNumber), "Page number must be at least 1.");
+        if (pageSize < 1) throw new ArgumentOutOfRangeException(nameof(pageSize), "Page size must be at least 1.");
+
+        var all = _store.Values.ToList();
+        var items = all.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+        return Task.FromResult(new PagedResult<T>(items, all.Count, pageNumber, pageSize));
     }
 
     public Task<IEnumerable<T>> QueryAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)
