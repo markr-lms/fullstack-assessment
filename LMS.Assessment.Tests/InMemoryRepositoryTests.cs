@@ -22,7 +22,7 @@ public class InMemoryRepositoryTests
         return repo;
     }
 
-    // ── GetByIdAsync ────────────────────────────────────────────────
+    #region GetByIdAsync
 
     [Fact]
     public async Task GetByIdAsync_ExistingId_ReturnsEntity()
@@ -52,7 +52,9 @@ public class InMemoryRepositoryTests
         Assert.Null(result);
     }
 
-    // ── GetAllAsync ─────────────────────────────────────────────────
+    #endregion
+
+    #region GetAllAsync
 
     [Fact]
     public async Task GetAllAsync_EmptyStore_ReturnsEmptyPage()
@@ -126,7 +128,9 @@ public class InMemoryRepositoryTests
             () => repo.GetAllAsync(pageSize: 0));
     }
 
-    // ── CreateAsync ─────────────────────────────────────────────────
+    #endregion
+
+    #region CreateAsync
 
     [Fact]
     public async Task CreateAsync_NewEntity_StoresAndReturnsEntity()
@@ -156,7 +160,9 @@ public class InMemoryRepositoryTests
             () => repo.CreateAsync(new TestEntity(id, "duplicate")));
     }
 
-    // ── UpdateAsync ─────────────────────────────────────────────────
+    #endregion
+
+    #region UpdateAsync
 
     [Fact]
     public async Task UpdateAsync_ExistingEntity_UpdatesAndReturnsEntity()
@@ -185,7 +191,9 @@ public class InMemoryRepositoryTests
             () => repo.UpdateAsync(new TestEntity(Guid.NewGuid(), "value")));
     }
 
-    // ── DeleteAsync ─────────────────────────────────────────────────
+    #endregion
+
+    #region DeleteAsync
 
     [Fact]
     public async Task DeleteAsync_ExistingId_RemovesEntity()
@@ -211,5 +219,7 @@ public class InMemoryRepositoryTests
         await Assert.ThrowsAsync<KeyNotFoundException>(
             () => repo.DeleteAsync(Guid.NewGuid()));
     }
+
+    #endregion
 }
 
