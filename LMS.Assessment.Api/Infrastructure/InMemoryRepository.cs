@@ -15,7 +15,7 @@ public class InMemoryRepository<T> : IRepository<T> where T : IEntity
         return entity;
     }
 
-    public async Task<PagedResult<T>> GetAllAsync(int pageNumber = 1, int pageSize = 20)
+    public async Task<PaginatedList<T>> GetAllAsync(int pageNumber = 1, int pageSize = 20)
     {
         if (pageNumber < 1) throw new ArgumentOutOfRangeException(nameof(pageNumber), "Page number must be at least 1.");
         if (pageSize < 1) throw new ArgumentOutOfRangeException(nameof(pageSize), "Page size must be at least 1.");
@@ -24,7 +24,7 @@ public class InMemoryRepository<T> : IRepository<T> where T : IEntity
         var items = all.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
 
         await SimulateDbOperation();
-        return new PagedResult<T>(items, all.Count, pageNumber, pageSize);
+        return new PaginatedList<T>(items, all.Count, pageNumber, pageSize);
     }
 
     public async Task<T> CreateAsync(T entity)

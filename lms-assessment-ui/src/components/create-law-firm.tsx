@@ -9,7 +9,6 @@ const validationSchema = yup.object({
   address: yup.string().trim().required().min(1).max(100),
   phoneNumber: yup.string().trim().required(),
   email: yup.string().trim().required().email(),
-  createdBy: yup.string().trim().required(),
 });
 
 const CreateLawFirmForm = () => {
@@ -20,7 +19,6 @@ const CreateLawFirmForm = () => {
       address: "",
       phoneNumber: "",
       email: "",
-      createdBy: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values: CreateLawFirmRequest) => await createTask(values),

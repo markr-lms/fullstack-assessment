@@ -1,6 +1,6 @@
 namespace LMS.Assessment.Api.Abstractions;
 
-public record PagedResult<T>(
+public record PaginatedList<T>(
     IReadOnlyList<T> Items,
     int TotalCount,
     int PageNumber,

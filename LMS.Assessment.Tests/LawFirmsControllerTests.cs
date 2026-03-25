@@ -49,7 +49,7 @@ public class LawFirmsControllerTests
 
         // Assert
         var ok = Assert.IsType<OkObjectResult>(result);
-        var paged = Assert.IsType<PagedResult<LawFirm>>(ok.Value);
+        var paged = Assert.IsType<PaginatedList<LawFirm>>(ok.Value);
         Assert.Empty(paged.Items);
         Assert.Equal(0, paged.TotalCount);
     }
@@ -65,7 +65,7 @@ public class LawFirmsControllerTests
 
         // Assert
         var ok = Assert.IsType<OkObjectResult>(result);
-        var paged = Assert.IsType<PagedResult<LawFirm>>(ok.Value);
+        var paged = Assert.IsType<PaginatedList<LawFirm>>(ok.Value);
         Assert.Equal(2, paged.Items.Count);
         Assert.Equal(3, paged.TotalCount);
         Assert.Equal(2, paged.TotalPages);
