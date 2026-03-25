@@ -1,5 +1,6 @@
 using LMS.Assessment.Api.Abstractions;
 using LMS.Assessment.Api.Controllers;
+using LMS.Assessment.Api.Dtos;
 using LMS.Assessment.Api.Entities;
 using LMS.Assessment.Api.Infrastructure;
 using Microsoft.AspNetCore.Http;
@@ -110,17 +111,17 @@ public class LawFirmsControllerTests
     public async Task Create_ValidEntity_ReturnsCreatedAtAction()
     {
         // Arrange
-        var firm = MakeLawFirm();
+        var request = new CreateLawFirmRequest("Acme Law", "123 Main St", "555-1234", "acme@law.com");
         var sut = await CreateSut();
 
         // Act
-        var result = await sut.Create(firm);
+        var result = await sut.Create(request);
 
         // Assert
         var created = Assert.IsType<CreatedAtActionResult>(result);
         Assert.Equal(nameof(sut.GetById), created.ActionName);
-        Assert.Equal(firm.Id, created.RouteValues!["id"]);
-        Assert.Equal(firm, created.Value);
+        var createdFirm = Assert.IsType<LawFirm>(created.Value);
+        Assert.Equal(createdFirm.Id, created.RouteValues!["id"]);
     }
 
     #endregion
@@ -133,9 +134,10 @@ public class LawFirmsControllerTests
         // Arrange
         var firm = MakeLawFirm();
         var sut = await CreateSut(firm);
+        var request = new UpdateLawFirmRequest(firm.Id, firm.Name, firm.Address, firm.PhoneNumber, firm.Email);
 
         // Act
-        var result = await sut.Update(Guid.NewGuid(), firm);
+        var result = await sut.Update(Guid.NewGuid(), request);
 
         // Assert
         Assert.IsType<BadRequestObjectResult>(result);
@@ -148,14 +150,15 @@ public class LawFirmsControllerTests
         var id = Guid.NewGuid();
         var original = MakeLawFirm(id);
         var sut = await CreateSut(original);
-        var updated = original with { Name = "Updated Law" };
+        var request = new UpdateLawFirmRequest(id, "Updated Law", original.Address, original.PhoneNumber, original.Email);
 
         // Act
-        var result = await sut.Update(id, updated);
+        var result = await sut.Update(id, request);
 
         // Assert
         var ok = Assert.IsType<OkObjectResult>(result);
-        Assert.Equal(updated, ok.Value);
+        var updatedFirm = Assert.IsType<LawFirm>(ok.Value);
+        Assert.Equal("Updated Law", updatedFirm.Name);
     }
 
     [Fact]
@@ -164,9 +167,10 @@ public class LawFirmsControllerTests
         // Arrange
         var firm = MakeLawFirm();
         var sut = await CreateSut();
+        var request = new UpdateLawFirmRequest(firm.Id, firm.Name, firm.Address, firm.PhoneNumber, firm.Email);
 
         // Act
-        var result = await sut.Update(firm.Id, firm);
+        var result = await sut.Update(firm.Id, request);
 
         // Assert
         Assert.IsType<NotFoundResult>(result);
