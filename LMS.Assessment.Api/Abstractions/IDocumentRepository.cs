@@ -4,10 +4,10 @@ namespace LMS.Assessment.Api.Abstractions;
 
 public interface IDocumentRepository<T> where T : IDocument
 {
-    Task<T?> GetByIdAsync(string id, CancellationToken cancellationToken = default);
-    Task<PagedResult<T>> GetAllAsync(int pageNumber = 1, int pageSize = 20, CancellationToken cancellationToken = default);
-    Task<IEnumerable<T>> QueryAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default);
-    Task<T> CreateAsync(T document, CancellationToken cancellationToken = default);
-    Task<T> UpdateAsync(T document, CancellationToken cancellationToken = default);
-    Task DeleteAsync(string id, CancellationToken cancellationToken = default);
+    Task<T?> GetByIdAsync(string id);
+    Task<PagedResult<T>> GetAllAsync(int pageNumber = 1, int pageSize = 20);
+    Task<IEnumerable<T>> QueryAsync(Expression<Func<T, bool>> predicate);
+    Task<T> CreateAsync(T document);
+    Task<T> UpdateAsync(T document);
+    Task DeleteAsync(string id);
 }
