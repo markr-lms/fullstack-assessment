@@ -5,7 +5,7 @@ import type { CreateLawFirmRequest, LawFirm } from "~/types/law-firm-types";
 export type IApi = ReturnType<typeof useApi>;
 
 export default function useApi() {
-  const apiBaseAddress = "http://localhost:5013";
+  const apiBaseAddress = "https://localhost:7113";
 
   const config = {
     headers: {
