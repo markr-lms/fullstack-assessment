@@ -1,6 +1,97 @@
-@LMS.Assessment.Api_HostAddress = http://localhost:5013
+@BaseAddress = http://localhost:5013
 
-GET {{LMS.Assessment.Api_HostAddress}}/weatherforecast/
+### ── LawFirms ──────────────────────────────────────────────────────────────
+
+# GET all law firms (with optional pagination)
+GET {{BaseAddress}}/lawfirms?pageNumber=1&pageSize=20
 Accept: application/json
+
+###
+
+# GET a law firm by ID
+GET {{BaseAddress}}/lawfirms/{{lawFirmId}}
+Accept: application/json
+
+###
+
+# POST create a new law firm
+POST {{BaseAddress}}/lawfirms
+Content-Type: application/json
+
+{
+  "id": "",
+  "name": "Acme Law",
+  "address": "123 Main St, Dublin",
+  "phoneNumber": "+353 1 234 5678",
+  "email": "contact@acmelaw.ie"
+}
+
+###
+
+# PUT update an existing law firm
+PUT {{BaseAddress}}/lawfirms/{{lawFirmId}}
+Content-Type: application/json
+
+{
+  "id": "{{lawFirmId}}",
+  "name": "Acme Law Updated",
+  "address": "456 High St, Dublin",
+  "phoneNumber": "+353 1 234 5678",
+  "email": "info@acmelaw.ie"
+}
+
+###
+
+# DELETE a law firm by ID
+DELETE {{BaseAddress}}/lawfirms/{{lawFirmId}}
+
+###
+
+### ── Documents ─────────────────────────────────────────────────────────────
+
+# GET all documents (with optional pagination)
+GET {{BaseAddress}}/documents?pageNumber=1&pageSize=20
+Accept: application/json
+
+###
+
+# GET a document by ID
+GET {{BaseAddress}}/documents/{{documentId}}
+Accept: application/json
+
+###
+
+# POST create a new document
+POST {{BaseAddress}}/documents
+Content-Type: application/json
+
+{
+  "id": "",
+  "title": "Contract Agreement",
+  "type": "Contract",
+  "lawFirmId": "{{lawFirmId}}",
+  "uploadedBy": "john.doe",
+  "uploadedAt": "2025-01-01T00:00:00Z"
+}
+
+###
+
+# PUT update an existing document
+PUT {{BaseAddress}}/documents/{{documentId}}
+Content-Type: application/json
+
+{
+  "id": "{{documentId}}",
+  "title": "Contract Agreement (Revised)",
+  "type": "Contract",
+  "lawFirmId": "{{lawFirmId}}",
+  "uploadedBy": "john.doe",
+  "uploadedAt": "2025-01-01T00:00:00Z"
+}
+
+###
+
+# DELETE a document by ID
+DELETE {{BaseAddress}}/documents/{{documentId}}
 
 ###
