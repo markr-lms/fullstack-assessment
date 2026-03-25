@@ -1,6 +1,6 @@
 namespace LMS.Assessment.Api.Abstractions;
 
-public interface IDocument
+public interface IEntity
 {
     string Id { get; }
 }

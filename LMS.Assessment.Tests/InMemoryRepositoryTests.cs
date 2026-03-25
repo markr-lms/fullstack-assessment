@@ -3,17 +3,19 @@ using LMS.Assessment.Api.Infrastructure;
 
 namespace LMS.Assessment.Tests;
 
-public class InMemoryDocumentRepositoryTests
+public class InMemoryRepositoryTests
 {
-    // Minimal IDocument implementation used across all tests
-    private record TestDocument(string Id, string Value) : IDocument;
+    // Minimal implementation used across all tests
+    private record TestEntity(string Id, string Value) : IEntity;
 
-    private static InMemoryDocumentRepository<TestDocument> CreateRepo(
-        params TestDocument[] seed)
+    private static async Task<InMemoryRepository<TestEntity>> CreateRepo(
+        params TestEntity[] seed)
     {
-        var repo = new InMemoryDocumentRepository<TestDocument>();
+        var repo = new InMemoryRepository<TestEntity>();
+
         foreach (var doc in seed)
-            repo.CreateAsync(doc).GetAwaiter().GetResult();
+            await repo.CreateAsync(doc);
+
         return repo;
     }
 
@@ -22,8 +24,8 @@ public class InMemoryDocumentRepositoryTests
     [Fact]
     public async Task GetByIdAsync_ExistingId_ReturnsDocument()
     {
-        var doc = new TestDocument("1", "hello");
-        var repo = CreateRepo(doc);
+        var doc = new TestEntity("1", "hello");
+        var repo = await CreateRepo(doc);
 
         var result = await repo.GetByIdAsync("1");
 
@@ -33,7 +35,7 @@ public class InMemoryDocumentRepositoryTests
     [Fact]
     public async Task GetByIdAsync_MissingId_ReturnsNull()
     {
-        var repo = CreateRepo();
+        var repo = await CreateRepo();
 
         var result = await repo.GetByIdAsync("missing");
 
@@ -45,7 +47,7 @@ public class InMemoryDocumentRepositoryTests
     [Fact]
     public async Task GetAllAsync_EmptyStore_ReturnsEmptyPage()
     {
-        var repo = CreateRepo();
+        var repo = await CreateRepo();
 
         var result = await repo.GetAllAsync(pageNumber: 1, pageSize: 10);
 
@@ -57,10 +59,10 @@ public class InMemoryDocumentRepositoryTests
     [Fact]
     public async Task GetAllAsync_FirstPage_ReturnsCorrectSlice()
     {
-        var repo = CreateRepo(
-            new TestDocument("1", "a"),
-            new TestDocument("2", "b"),
-            new TestDocument("3", "c"));
+        var repo = await CreateRepo(
+            new TestEntity("1", "a"),
+            new TestEntity("2", "b"),
+            new TestEntity("3", "c"));
 
         var result = await repo.GetAllAsync(pageNumber: 1, pageSize: 2);
 
@@ -74,10 +76,10 @@ public class InMemoryDocumentRepositoryTests
     [Fact]
     public async Task GetAllAsync_SecondPage_ReturnsRemainingItems()
     {
-        var repo = CreateRepo(
-            new TestDocument("1", "a"),
-            new TestDocument("2", "b"),
-            new TestDocument("3", "c"));
+        var repo = await CreateRepo(
+            new TestEntity("1", "a"),
+            new TestEntity("2", "b"),
+            new TestEntity("3", "c"));
 
         var result = await repo.GetAllAsync(pageNumber: 2, pageSize: 2);
 
@@ -90,7 +92,7 @@ public class InMemoryDocumentRepositoryTests
     [Fact]
     public async Task GetAllAsync_PageNumberLessThanOne_ThrowsArgumentOutOfRangeException()
     {
-        var repo = CreateRepo();
+        var repo = await CreateRepo();
 
         await Assert.ThrowsAsync<ArgumentOutOfRangeException>(
             () => repo.GetAllAsync(pageNumber: 0));
@@ -99,36 +101,10 @@ public class InMemoryDocumentRepositoryTests
     [Fact]
     public async Task GetAllAsync_PageSizeLessThanOne_ThrowsArgumentOutOfRangeException()
     {
-        var repo = CreateRepo();
+        var repo = await CreateRepo();
 
         await Assert.ThrowsAsync<ArgumentOutOfRangeException>(
             () => repo.GetAllAsync(pageSize: 0));
-    }
-
-    // ── QueryAsync ──────────────────────────────────────────────────
-
-    [Fact]
-    public async Task QueryAsync_MatchingPredicate_ReturnsFilteredDocuments()
-    {
-        var repo = CreateRepo(
-            new TestDocument("1", "match"),
-            new TestDocument("2", "no"),
-            new TestDocument("3", "match"));
-
-        var result = await repo.QueryAsync(d => d.Value == "match");
-
-        Assert.Equal(2, result.Count());
-        Assert.All(result, d => Assert.Equal("match", d.Value));
-    }
-
-    [Fact]
-    public async Task QueryAsync_NoMatch_ReturnsEmpty()
-    {
-        var repo = CreateRepo(new TestDocument("1", "hello"));
-
-        var result = await repo.QueryAsync(d => d.Value == "nope");
-
-        Assert.Empty(result);
     }
 
     // ── CreateAsync ─────────────────────────────────────────────────
@@ -136,8 +112,8 @@ public class InMemoryDocumentRepositoryTests
     [Fact]
     public async Task CreateAsync_NewDocument_StoresAndReturnsDocument()
     {
-        var repo = CreateRepo();
-        var doc = new TestDocument("1", "new");
+        var repo = await CreateRepo();
+        var doc = new TestEntity("1", "new");
 
         var result = await repo.CreateAsync(doc);
 
@@ -148,10 +124,10 @@ public class InMemoryDocumentRepositoryTests
     [Fact]
     public async Task CreateAsync_DuplicateId_ThrowsInvalidOperationException()
     {
-        var repo = CreateRepo(new TestDocument("1", "original"));
+        var repo = await CreateRepo(new TestEntity("1", "original"));
 
         await Assert.ThrowsAsync<InvalidOperationException>(
-            () => repo.CreateAsync(new TestDocument("1", "duplicate")));
+            () => repo.CreateAsync(new TestEntity("1", "duplicate")));
     }
 
     // ── UpdateAsync ─────────────────────────────────────────────────
@@ -159,8 +135,8 @@ public class InMemoryDocumentRepositoryTests
     [Fact]
     public async Task UpdateAsync_ExistingDocument_UpdatesAndReturnsDocument()
     {
-        var repo = CreateRepo(new TestDocument("1", "old"));
-        var updated = new TestDocument("1", "new");
+        var repo = await CreateRepo(new TestEntity("1", "old"));
+        var updated = new TestEntity("1", "new");
 
         var result = await repo.UpdateAsync(updated);
 
@@ -171,10 +147,10 @@ public class InMemoryDocumentRepositoryTests
     [Fact]
     public async Task UpdateAsync_MissingDocument_ThrowsKeyNotFoundException()
     {
-        var repo = CreateRepo();
+        var repo = await CreateRepo();
 
         await Assert.ThrowsAsync<KeyNotFoundException>(
-            () => repo.UpdateAsync(new TestDocument("ghost", "value")));
+            () => repo.UpdateAsync(new TestEntity("ghost", "value")));
     }
 
     // ── DeleteAsync ─────────────────────────────────────────────────
@@ -182,7 +158,7 @@ public class InMemoryDocumentRepositoryTests
     [Fact]
     public async Task DeleteAsync_ExistingId_RemovesDocument()
     {
-        var repo = CreateRepo(new TestDocument("1", "bye"));
+        var repo = await CreateRepo(new TestEntity("1", "bye"));
 
         await repo.DeleteAsync("1");
 
@@ -192,7 +168,7 @@ public class InMemoryDocumentRepositoryTests
     [Fact]
     public async Task DeleteAsync_MissingId_ThrowsKeyNotFoundException()
     {
-        var repo = CreateRepo();
+        var repo = await CreateRepo();
 
         await Assert.ThrowsAsync<KeyNotFoundException>(
             () => repo.DeleteAsync("ghost"));

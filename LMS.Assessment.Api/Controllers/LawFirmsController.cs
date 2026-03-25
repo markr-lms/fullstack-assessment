@@ -8,9 +8,9 @@ namespace LMS.Assessment.Api.Controllers;
 [Route("[controller]")]
 public class LawFirmsController : ControllerBase
 {
-    private readonly IDocumentRepository<LawFirm> _repository;
+    private readonly IRepository<LawFirm> _repository;
 
-    public LawFirmsController(IDocumentRepository<LawFirm> repository)
+    public LawFirmsController(IRepository<LawFirm> repository)
     {
         _repository = repository;
     }

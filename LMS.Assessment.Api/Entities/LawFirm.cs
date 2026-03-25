@@ -7,4 +7,4 @@ public record LawFirm(
     string Name,
     string Address,
     string PhoneNumber,
-    string Email) : IDocument;
+    string Email) : IEntity;
