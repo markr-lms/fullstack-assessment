@@ -165,35 +165,4 @@ public class DocumentsControllerTests
     }
 
     #endregion
-
-    #region Delete
-
-    [Fact]
-    public async Task Delete_ExistingId_ReturnsNoContent()
-    {
-        // Arrange
-        var document = MakeDocument();
-        var sut = await CreateSut(document);
-
-        // Act
-        var result = await sut.Delete(document.Id);
-
-        // Assert
-        Assert.IsType<NoContentResult>(result);
-    }
-
-    [Fact]
-    public async Task Delete_MissingId_ReturnsNotFound()
-    {
-        // Arrange
-        var sut = await CreateSut();
-
-        // Act
-        var result = await sut.Delete(Guid.NewGuid());
-
-        // Assert
-        Assert.IsType<NotFoundResult>(result);
-    }
-
-    #endregion
 }

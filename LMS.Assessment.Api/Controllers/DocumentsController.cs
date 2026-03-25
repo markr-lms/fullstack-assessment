@@ -52,18 +52,4 @@ public class DocumentsController : ControllerBase
             return NotFound();
         }
     }
-
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(Guid id)
-    {
-        try
-        {
-            await _repository.DeleteAsync(id);
-            return NoContent();
-        }
-        catch (KeyNotFoundException)
-        {
-            return NotFound();
-        }
-    }
 }

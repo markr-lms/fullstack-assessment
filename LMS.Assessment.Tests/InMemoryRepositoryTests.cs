@@ -192,34 +192,5 @@ public class InMemoryRepositoryTests
     }
 
     #endregion
-
-    #region DeleteAsync
-
-    [Fact]
-    public async Task DeleteAsync_ExistingId_RemovesEntity()
-    {
-        // Arrange
-        var id = Guid.NewGuid();
-        var repo = await CreateRepo(new TestEntity(id, "bye"));
-
-        // Act
-        await repo.DeleteAsync(id);
-
-        // Assert
-        Assert.Null(await repo.GetByIdAsync(id));
-    }
-
-    [Fact]
-    public async Task DeleteAsync_MissingId_ThrowsKeyNotFoundException()
-    {
-        // Arrange
-        var repo = await CreateRepo();
-
-        // Act & Assert
-        await Assert.ThrowsAsync<KeyNotFoundException>(
-            () => repo.DeleteAsync(Guid.NewGuid()));
-    }
-
-    #endregion
 }
 

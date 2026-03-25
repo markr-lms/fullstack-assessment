@@ -1,5 +1,6 @@
 using LMS.Assessment.Api.Abstractions;
 using LMS.Assessment.Api.Entities;
+using LMS.Assessment.Api.Helpers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LMS.Assessment.Api.Controllers;
@@ -30,11 +31,9 @@ public class LawFirmsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(HttpRequest request, LawFirm lawFirm)
+    public async Task<IActionResult> Create(LawFirm lawFirm)
     {
-        var userAgent = request.Headers.UserAgent;
-        var customHeader = request.Headers["x-username"];
-
+        var userId = Request.GetUserId();
         var created = await _repository.CreateAsync(lawFirm);
         return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
     }
@@ -49,20 +48,6 @@ public class LawFirmsController : ControllerBase
         {
             var updated = await _repository.UpdateAsync(lawFirm);
             return Ok(updated);
-        }
-        catch (KeyNotFoundException)
-        {
-            return NotFound();
-        }
-    }
-
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(Guid id)
-    {
-        try
-        {
-            await _repository.DeleteAsync(id);
-            return NoContent();
         }
         catch (KeyNotFoundException)
         {

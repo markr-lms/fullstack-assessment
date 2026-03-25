@@ -47,14 +47,6 @@ public class InMemoryRepository<T> : IRepository<T> where T : IEntity
         return entity;
     }
 
-    public async Task DeleteAsync(Guid id)
-    {
-        if (!_store.TryRemove(id, out _))
-            throw new KeyNotFoundException($"No entity with id '{id}' was found.");
-
-        await SimulateDbOperation();
-    }
-
     private static async Task SimulateDbOperation()
     {
         // Simulate some latency to mimic a real database operation
