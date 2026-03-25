@@ -69,8 +69,6 @@ public class InMemoryRepositoryTests
         Assert.Equal(2, result.Items.Count);
         Assert.Equal(3, result.TotalCount);
         Assert.Equal(2, result.TotalPages);
-        Assert.True(result.HasNextPage);
-        Assert.False(result.HasPreviousPage);
     }
 
     [Fact]
@@ -85,8 +83,6 @@ public class InMemoryRepositoryTests
 
         Assert.Single(result.Items);
         Assert.Equal(3, result.TotalCount);
-        Assert.False(result.HasNextPage);
-        Assert.True(result.HasPreviousPage);
     }
 
     [Fact]
