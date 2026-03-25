@@ -1,3 +1,6 @@
+using LMS.Assessment.Api.Abstractions;
+using LMS.Assessment.Api.Infrastructure;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -5,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+builder.Services.AddSingleton<IDocumentRepository<IDocument>, InMemoryDocumentRepository<IDocument>>();
 
 var app = builder.Build();
 
