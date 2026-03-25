@@ -29,35 +29,73 @@ const CreateLawFirmForm = () => {
       email: "",
     },
     validationSchema: validationSchema,
-    onSubmit: async (values: CreateLawFirmRequest) => await mutateAsync(values),
+    onSubmit: async (values: CreateLawFirmRequest) => {
+      console.log("hi");
+      await mutateAsync(values);
+    },
   });
 
   return (
-    <div>
-      <form onSubmit={form.handleSubmit}>
-        <TextField
-          fullWidth
-          id="email"
-          name="email"
-          label="Email"
-          value={form.values.email}
-          onChange={form.handleChange}
-          onBlur={form.handleBlur}
-          error={form.touched.email && Boolean(form.errors.email)}
-          helperText={form.touched.email && form.errors.email}
-          disabled={isPending}
-        />
-        <Button
-          color="primary"
-          variant="contained"
-          fullWidth
-          type="submit"
-          disabled={isPending}
-        >
-          Submit
-        </Button>
-      </form>
-    </div>
+    <section id="add-firm">
+      <TextField
+        fullWidth
+        id="name"
+        name="name"
+        label="Name"
+        value={form.values.name}
+        onChange={form.handleChange}
+        onBlur={form.handleBlur}
+        error={form.touched.name && Boolean(form.errors.name)}
+        helperText={form.touched.name && form.errors.name}
+        disabled={isPending}
+      />
+      <TextField
+        fullWidth
+        id="address"
+        name="address"
+        label="Address"
+        value={form.values.address}
+        onChange={form.handleChange}
+        onBlur={form.handleBlur}
+        error={form.touched.address && Boolean(form.errors.address)}
+        helperText={form.touched.address && form.errors.address}
+        disabled={isPending}
+      />
+      <TextField
+        fullWidth
+        id="phoneNumber"
+        name="phoneNumber"
+        label="Phone Number"
+        value={form.values.phoneNumber}
+        onChange={form.handleChange}
+        onBlur={form.handleBlur}
+        error={form.touched.phoneNumber && Boolean(form.errors.phoneNumber)}
+        helperText={form.touched.phoneNumber && form.errors.phoneNumber}
+        disabled={isPending}
+      />
+      <TextField
+        fullWidth
+        id="email"
+        name="email"
+        label="Email"
+        value={form.values.email}
+        onChange={form.handleChange}
+        onBlur={form.handleBlur}
+        error={form.touched.email && Boolean(form.errors.email)}
+        helperText={form.touched.email && form.errors.email}
+        disabled={isPending}
+      />
+      <Button
+        color="primary"
+        variant="contained"
+        fullWidth
+        type="submit"
+        onClick={() => form.submitForm()}
+        disabled={isPending}
+      >
+        Create Law Firm
+      </Button>
+    </section>
   );
 };
 
