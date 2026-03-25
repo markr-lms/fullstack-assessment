@@ -12,20 +12,19 @@ public class DocumentsControllerTests
         id ?? Guid.NewGuid(),
         "Contract Agreement",
         "PDF",
-        Guid.NewGuid().ToString(),
-        "john.doe",
+        Guid.NewGuid(),
+        Guid.NewGuid(),
         DateTime.UtcNow,
         Guid.NewGuid());
 
-    private static async Task<(DocumentsController Controller, InMemoryRepository<Document> Repo)> CreateSut(
-        params Document[] seed)
+    private static async Task<DocumentsController> CreateSut(params Document[] seed)
     {
         var repo = new InMemoryRepository<Document>();
 
         foreach (var document in seed)
             await repo.CreateAsync(document);
 
-        return (new DocumentsController(repo), repo);
+        return new DocumentsController(repo);
     }
 
     #region GetAll
@@ -34,7 +33,7 @@ public class DocumentsControllerTests
     public async Task GetAll_EmptyStore_ReturnsOkWithEmptyPage()
     {
         // Arrange
-        var (sut, _) = await CreateSut();
+        var sut = await CreateSut();
 
         // Act
         var result = await sut.GetAll();
@@ -50,7 +49,7 @@ public class DocumentsControllerTests
     public async Task GetAll_WithItems_ReturnsOkWithPagedResult()
     {
         // Arrange
-        var (sut, _) = await CreateSut(MakeDocument(), MakeDocument(), MakeDocument());
+        var sut = await CreateSut(MakeDocument(), MakeDocument(), MakeDocument());
 
         // Act
         var result = await sut.GetAll(pageNumber: 1, pageSize: 2);
@@ -72,7 +71,7 @@ public class DocumentsControllerTests
     {
         // Arrange
         var document = MakeDocument();
-        var (sut, _) = await CreateSut(document);
+        var sut = await CreateSut(document);
 
         // Act
         var result = await sut.GetById(document.Id);
@@ -86,7 +85,7 @@ public class DocumentsControllerTests
     public async Task GetById_MissingId_ReturnsNotFound()
     {
         // Arrange
-        var (sut, _) = await CreateSut();
+        var sut = await CreateSut();
 
         // Act
         var result = await sut.GetById(Guid.NewGuid());
@@ -104,7 +103,7 @@ public class DocumentsControllerTests
     {
         // Arrange
         var document = MakeDocument();
-        var (sut, _) = await CreateSut();
+        var sut = await CreateSut();
 
         // Act
         var result = await sut.Create(document);
@@ -125,7 +124,7 @@ public class DocumentsControllerTests
     {
         // Arrange
         var document = MakeDocument();
-        var (sut, _) = await CreateSut(document);
+        var sut = await CreateSut(document);
 
         // Act
         var result = await sut.Update(Guid.NewGuid(), document);
@@ -140,7 +139,7 @@ public class DocumentsControllerTests
         // Arrange
         var id = Guid.NewGuid();
         var original = MakeDocument(id);
-        var (sut, _) = await CreateSut(original);
+        var sut = await CreateSut(original);
         var updated = original with { Title = "Updated Contract" };
 
         // Act
@@ -156,7 +155,7 @@ public class DocumentsControllerTests
     {
         // Arrange
         var document = MakeDocument();
-        var (sut, _) = await CreateSut();
+        var sut = await CreateSut();
 
         // Act
         var result = await sut.Update(document.Id, document);
@@ -174,7 +173,7 @@ public class DocumentsControllerTests
     {
         // Arrange
         var document = MakeDocument();
-        var (sut, _) = await CreateSut(document);
+        var sut = await CreateSut(document);
 
         // Act
         var result = await sut.Delete(document.Id);
@@ -187,7 +186,7 @@ public class DocumentsControllerTests
     public async Task Delete_MissingId_ReturnsNotFound()
     {
         // Arrange
-        var (sut, _) = await CreateSut();
+        var sut = await CreateSut();
 
         // Act
         var result = await sut.Delete(Guid.NewGuid());

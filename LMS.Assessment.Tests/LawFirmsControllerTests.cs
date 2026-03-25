@@ -16,15 +16,14 @@ public class LawFirmsControllerTests
         "acme@law.com",
         Guid.NewGuid());
 
-    private static async Task<(LawFirmsController Controller, InMemoryRepository<LawFirm> Repo)> CreateSut(
-        params LawFirm[] seed)
+    private static async Task<LawFirmsController> CreateSut(params LawFirm[] seed)
     {
         var repo = new InMemoryRepository<LawFirm>();
 
         foreach (var firm in seed)
             await repo.CreateAsync(firm);
 
-        return (new LawFirmsController(repo), repo);
+        return new LawFirmsController(repo);
     }
 
     #region GetAll
@@ -33,7 +32,7 @@ public class LawFirmsControllerTests
     public async Task GetAll_EmptyStore_ReturnsOkWithEmptyPage()
     {
         // Arrange
-        var (sut, _) = await CreateSut();
+        var sut = await CreateSut();
 
         // Act
         var result = await sut.GetAll();
@@ -49,7 +48,7 @@ public class LawFirmsControllerTests
     public async Task GetAll_WithItems_ReturnsOkWithPagedResult()
     {
         // Arrange
-        var (sut, _) = await CreateSut(MakeLawFirm(), MakeLawFirm(), MakeLawFirm());
+        var sut = await CreateSut(MakeLawFirm(), MakeLawFirm(), MakeLawFirm());
 
         // Act
         var result = await sut.GetAll(pageNumber: 1, pageSize: 2);
@@ -71,7 +70,7 @@ public class LawFirmsControllerTests
     {
         // Arrange
         var firm = MakeLawFirm();
-        var (sut, _) = await CreateSut(firm);
+        var sut = await CreateSut(firm);
 
         // Act
         var result = await sut.GetById(firm.Id);
@@ -85,7 +84,7 @@ public class LawFirmsControllerTests
     public async Task GetById_MissingId_ReturnsNotFound()
     {
         // Arrange
-        var (sut, _) = await CreateSut();
+        var sut = await CreateSut();
 
         // Act
         var result = await sut.GetById(Guid.NewGuid());
@@ -103,7 +102,7 @@ public class LawFirmsControllerTests
     {
         // Arrange
         var firm = MakeLawFirm();
-        var (sut, _) = await CreateSut();
+        var sut = await CreateSut();
 
         // Act
         var result = await sut.Create(firm);
@@ -124,7 +123,7 @@ public class LawFirmsControllerTests
     {
         // Arrange
         var firm = MakeLawFirm();
-        var (sut, _) = await CreateSut(firm);
+        var sut = await CreateSut(firm);
 
         // Act
         var result = await sut.Update(Guid.NewGuid(), firm);
@@ -139,7 +138,7 @@ public class LawFirmsControllerTests
         // Arrange
         var id = Guid.NewGuid();
         var original = MakeLawFirm(id);
-        var (sut, _) = await CreateSut(original);
+        var sut = await CreateSut(original);
         var updated = original with { Name = "Updated Law" };
 
         // Act
@@ -155,7 +154,7 @@ public class LawFirmsControllerTests
     {
         // Arrange
         var firm = MakeLawFirm();
-        var (sut, _) = await CreateSut();
+        var sut = await CreateSut();
 
         // Act
         var result = await sut.Update(firm.Id, firm);
@@ -173,7 +172,7 @@ public class LawFirmsControllerTests
     {
         // Arrange
         var firm = MakeLawFirm();
-        var (sut, _) = await CreateSut(firm);
+        var sut = await CreateSut(firm);
 
         // Act
         var result = await sut.Delete(firm.Id);
@@ -186,7 +185,7 @@ public class LawFirmsControllerTests
     public async Task Delete_MissingId_ReturnsNotFound()
     {
         // Arrange
-        var (sut, _) = await CreateSut();
+        var sut = await CreateSut();
 
         // Act
         var result = await sut.Delete(Guid.NewGuid());

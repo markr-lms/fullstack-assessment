@@ -19,7 +19,7 @@ POST {{BaseAddress}}/lawfirms
 Content-Type: application/json
 
 {
-  "id": "",
+  "id": "ffffffff-0000-0000-0000-000000000001",
   "name": "Acme Law",
   "address": "123 Main St, Dublin",
   "phoneNumber": "+353 1 234 5678",
@@ -66,12 +66,13 @@ POST {{BaseAddress}}/documents
 Content-Type: application/json
 
 {
-  "id": "",
+  "id": "dddddddd-0000-0000-0000-000000000001",
   "title": "Contract Agreement",
   "type": "Contract",
-  "lawFirmId": "{{lawFirmId}}",
-  "uploadedBy": "john.doe",
-  "uploadedAt": "2025-01-01T00:00:00Z"
+  "lawFirmId": "ffffffff-0000-0000-0000-000000000001",
+  "uploadedBy": "aaaaaaaa-0000-0000-0000-000000000001",
+  "uploadedAt": "2025-01-01T00:00:00Z",
+  "createdBy": "aaaaaaaa-0000-0000-0000-000000000001"
 }
 
 ###
@@ -85,7 +86,7 @@ Content-Type: application/json
   "title": "Contract Agreement (Revised)",
   "type": "Contract",
   "lawFirmId": "{{lawFirmId}}",
-  "uploadedBy": "john.doe",
+  "uploadedBy": "aaaaaaaa-0000-0000-0000-000000000001",
   "uploadedAt": "2025-01-01T00:00:00Z"
 }
 

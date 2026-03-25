@@ -6,8 +6,8 @@ public record Document(
     Guid Id,
     string Title,
     string Type,
-    string LawFirmId,
-    string UploadedBy,
+    Guid LawFirmId,
+    Guid UploadedBy,
     DateTime UploadedAt,
     Guid CreatedBy) : IEntity
 {
