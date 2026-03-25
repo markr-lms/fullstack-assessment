@@ -2,6 +2,7 @@ namespace LMS.Assessment.Api.Abstractions;
 
 public interface IEntity
 {
-    string Id { get; }
+    Guid Id { get; }
+    Guid CreatedBy { get; }
     DateTime CreatedAt { get; }
 }

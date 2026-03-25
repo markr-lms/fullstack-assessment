@@ -5,9 +5,9 @@ namespace LMS.Assessment.Api.Infrastructure;
 
 public class InMemoryRepository<T> : IRepository<T> where T : IEntity
 {
-    private readonly ConcurrentDictionary<string, T> _store = new();
+    private readonly ConcurrentDictionary<Guid, T> _store = new();
 
-    public async Task<T?> GetByIdAsync(string id)
+    public async Task<T?> GetByIdAsync(Guid id)
     {
         _store.TryGetValue(id, out var entity);
 
@@ -47,7 +47,7 @@ public class InMemoryRepository<T> : IRepository<T> where T : IEntity
         return entity;
     }
 
-    public async Task DeleteAsync(string id)
+    public async Task DeleteAsync(Guid id)
     {
         if (!_store.TryRemove(id, out _))
             throw new KeyNotFoundException($"No entity with id '{id}' was found.");

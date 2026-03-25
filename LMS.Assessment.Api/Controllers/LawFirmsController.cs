@@ -23,7 +23,7 @@ public class LawFirmsController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(string id)
+    public async Task<IActionResult> GetById(Guid id)
     {
         var lawFirm = await _repository.GetByIdAsync(id);
         return lawFirm is null ? NotFound() : Ok(lawFirm);
@@ -37,7 +37,7 @@ public class LawFirmsController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(string id, LawFirm lawFirm)
+    public async Task<IActionResult> Update(Guid id, LawFirm lawFirm)
     {
         if (id != lawFirm.Id)
             return BadRequest("Id in the URL does not match the Id in the body.");
@@ -54,7 +54,7 @@ public class LawFirmsController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(string id)
+    public async Task<IActionResult> Delete(Guid id)
     {
         try
         {

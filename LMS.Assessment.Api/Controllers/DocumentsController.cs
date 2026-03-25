@@ -23,7 +23,7 @@ public class DocumentsController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(string id)
+    public async Task<IActionResult> GetById(Guid id)
     {
         var document = await _repository.GetByIdAsync(id);
         return document is null ? NotFound() : Ok(document);
@@ -37,7 +37,7 @@ public class DocumentsController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(string id, Document document)
+    public async Task<IActionResult> Update(Guid id, Document document)
     {
         if (id != document.Id)
             return BadRequest("Id in the URL does not match the Id in the body.");
@@ -54,7 +54,7 @@ public class DocumentsController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(string id)
+    public async Task<IActionResult> Delete(Guid id)
     {
         try
         {
