@@ -2,9 +2,14 @@
 
 An API for managing law firm details.
 
+## Requirements
+
+- .NET 10
+- Node 24+
+
 ## Setup
 
-```
+```sh
 git clone git@github.com:markr-lms/fullstack-assessment.git 
 cd fullstack-assessment 
 code .
@@ -12,26 +17,26 @@ code .
 
 ### API
 
-- Run API
-  ```
-  dotnet restore
-  dotnet tool restore
-  cd LMS.Assessment.Api
-  dotnet run
-  ```
+Run API
+```sh
+dotnet restore
+dotnet tool restore
+cd LMS.Assessment.Api
+dotnet run
+```
 
-- Run tests
+Run tests
 
-  `dotnet test`
+`dotnet test`
 
-- Run mutation tests
+Run mutation tests
 
-  `dotnet stryker`
+`dotnet stryker`
 
 
 ### UI
 
-```
+```sh
 cd lms-assessment-ui
 npm i
 npm run dev
