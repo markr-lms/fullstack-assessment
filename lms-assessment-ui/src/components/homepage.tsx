@@ -2,6 +2,7 @@ import Container from "@mui/material/Container";
 import Divider from "@mui/material/Divider";
 import Stack from "@mui/material/Stack";
 import CreateLawFirmForm from "./create-law-firm";
+import ListLawFirms from "./list-law-firms";
 
 function Homepage() {
   return (
@@ -12,9 +13,7 @@ function Homepage() {
       <Stack component="main" spacing={2}>
         <CreateLawFirmForm />
         <Divider />
-        <section id="list-firms">
-          <h2>List of Law Firms</h2>
-        </section>
+        <ListLawFirms />
       </Stack>
     </Container>
   );

@@ -13,7 +13,7 @@ const validationSchema = yup.object({
   email: yup.string().trim().required().email(),
 });
 
-const CreateLawFirmForm = () => {
+export default function CreateLawFirmForm() {
   const { createLawFirm } = useApi();
 
   const { mutateAsync, isPending } = useMutation({
@@ -29,10 +29,7 @@ const CreateLawFirmForm = () => {
       email: "",
     },
     validationSchema: validationSchema,
-    onSubmit: async (values: CreateLawFirmRequest) => {
-      console.log("hi");
-      await mutateAsync(values);
-    },
+    onSubmit: async (values: CreateLawFirmRequest) => await mutateAsync(values),
   });
 
   return (
@@ -97,6 +94,4 @@ const CreateLawFirmForm = () => {
       </Button>
     </section>
   );
-};
-
-export default CreateLawFirmForm;
+}
