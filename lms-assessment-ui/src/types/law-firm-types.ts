@@ -5,8 +5,12 @@ export type LawFirm = {
   phoneNumber: string;
   email: string;
   createdBy: string;
+  createdAt: string;
 };
 
-export type CreateLawFirmRequest = Omit<LawFirm, "id" | "createdBy">;
+export type CreateLawFirmRequest = Omit<
+  LawFirm,
+  "id" | "createdBy" | "createdAt"
+>;
 
-export type UpdateLawFirmRequest = Omit<LawFirm, "createdBy">;
+export type UpdateLawFirmRequest = Omit<LawFirm, "createdBy" | "createdAt">;

@@ -51,7 +51,10 @@ static async Task SeedLawFirms(WebApplication app)
             f.Address.FullAddress(),
             f.Phone.PhoneNumber(),
             f.Internet.Email(),
-            Guid.NewGuid()));
+            Guid.NewGuid())
+        {
+            CreatedAt = f.Date.Past(1)
+        });
 
     foreach (var lawFirm in lawFirmFaker.Generate(50))
     {

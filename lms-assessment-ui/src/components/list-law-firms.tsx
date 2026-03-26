@@ -54,6 +54,9 @@ export default function ListLawFirms() {
                 <TableCell style={{ width: 160 }} align="right">
                   Email
                 </TableCell>
+                <TableCell style={{ width: 160 }} align="right">
+                  Created At
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -72,6 +75,12 @@ export default function ListLawFirms() {
                     <TableCell scope="row">{row.name}</TableCell>
                     <TableCell align="right">{row.phoneNumber}</TableCell>
                     <TableCell align="right">{row.email}</TableCell>
+                    <TableCell align="right">
+                      {new Date(row.createdAt).toLocaleString("en-GB", {
+                        dateStyle: "short",
+                        timeStyle: "short",
+                      })}
+                    </TableCell>
                   </TableRow>
                 ))}
             </TableBody>
