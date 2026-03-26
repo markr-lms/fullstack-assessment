@@ -2,9 +2,8 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { useFormik } from "formik";
 import * as yup from "yup";
+import useCreateLawFirm from "~/hooks/useCreateLawFirm";
 import type { CreateLawFirmRequest } from "~/types/law-firm-types";
-import useApi from "~/hooks/useApi";
-import { useMutation } from "@tanstack/react-query";
 
 const validationSchema = yup.object({
   name: yup.string().trim().required().min(1).max(50),
@@ -14,11 +13,7 @@ const validationSchema = yup.object({
 });
 
 export default function CreateLawFirmForm() {
-  const { createLawFirm } = useApi();
-
-  const { mutateAsync, isPending } = useMutation({
-    mutationFn: (values: CreateLawFirmRequest) => createLawFirm(values),
-  });
+  const { createLawFirmAsync, isSubmitting } = useCreateLawFirm();
 
   const form = useFormik({
     enableReinitialize: true,
@@ -29,7 +24,10 @@ export default function CreateLawFirmForm() {
       email: "",
     },
     validationSchema: validationSchema,
-    onSubmit: async (values: CreateLawFirmRequest) => await mutateAsync(values),
+    onSubmit: async (values: CreateLawFirmRequest) => {
+      await createLawFirmAsync(values);
+      form.resetForm();
+    },
   });
 
   return (
@@ -45,7 +43,8 @@ export default function CreateLawFirmForm() {
         onBlur={form.handleBlur}
         error={form.touched.name && Boolean(form.errors.name)}
         helperText={form.touched.name && form.errors.name}
-        disabled={isPending}
+        disabled={isSubmitting}
+        sx={{ marginBottom: 2 }}
       />
       <TextField
         fullWidth
@@ -57,7 +56,8 @@ export default function CreateLawFirmForm() {
         onBlur={form.handleBlur}
         error={form.touched.address && Boolean(form.errors.address)}
         helperText={form.touched.address && form.errors.address}
-        disabled={isPending}
+        disabled={isSubmitting}
+        sx={{ marginBottom: 2 }}
       />
       <TextField
         fullWidth
@@ -69,7 +69,8 @@ export default function CreateLawFirmForm() {
         onBlur={form.handleBlur}
         error={form.touched.phoneNumber && Boolean(form.errors.phoneNumber)}
         helperText={form.touched.phoneNumber && form.errors.phoneNumber}
-        disabled={isPending}
+        disabled={isSubmitting}
+        sx={{ marginBottom: 2 }}
       />
       <TextField
         fullWidth
@@ -81,7 +82,8 @@ export default function CreateLawFirmForm() {
         onBlur={form.handleBlur}
         error={form.touched.email && Boolean(form.errors.email)}
         helperText={form.touched.email && form.errors.email}
-        disabled={isPending}
+        disabled={isSubmitting}
+        sx={{ marginBottom: 2 }}
       />
       <Button
         color="primary"
@@ -89,7 +91,8 @@ export default function CreateLawFirmForm() {
         fullWidth
         type="submit"
         onClick={() => form.submitForm()}
-        disabled={isPending}
+        disabled={isSubmitting}
+        sx={{ marginBottom: 2 }}
       >
         Create Law Firm
       </Button>

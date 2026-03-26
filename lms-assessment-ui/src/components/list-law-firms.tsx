@@ -11,6 +11,7 @@ import useApi from "~/hooks/useApi";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import TableHead from "@mui/material/TableHead";
+import Skeleton from "@mui/material/Skeleton";
 
 export default function ListLawFirms() {
   const [page, setPage] = useState(1);
@@ -40,49 +41,47 @@ export default function ListLawFirms() {
   return (
     <section id="list-firms">
       <h2>List of Law Firms</h2>
-      {status === "pending" && <p>Loading...</p>}
       {status === "error" && <p>Error loading law firms.</p>}
-      {status === "success" && data.totalCount > 0 && (
+      {status !== "error" && (
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 500 }}>
             <TableHead>
               <TableRow>
                 <TableCell>Name</TableCell>
-                <TableCell align="right">Phone number</TableCell>
-                <TableCell align="right">Email</TableCell>
+                <TableCell style={{ width: 160 }} align="right">
+                  Phone number
+                </TableCell>
+                <TableCell style={{ width: 160 }} align="right">
+                  Email
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {data.items.map((row) => (
-                <TableRow key={row.name}>
-                  <TableCell component="th" scope="row">
-                    {row.name}
-                  </TableCell>
-                  <TableCell style={{ width: 160 }} align="right">
-                    {row.phoneNumber}
-                  </TableCell>
-                  <TableCell style={{ width: 160 }} align="right">
-                    {row.email}
-                  </TableCell>
-                </TableRow>
-              ))}
+              {status === "pending" &&
+                // render rows of skeletons to avoid layout shift when data loads
+                [...Array(pageSize)].map((_, index) => (
+                  <TableRow key={index}>
+                    <TableCell colSpan={3} align="center">
+                      <Skeleton />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              {status === "success" &&
+                data.items.map((row) => (
+                  <TableRow key={row.name}>
+                    <TableCell scope="row">{row.name}</TableCell>
+                    <TableCell align="right">{row.phoneNumber}</TableCell>
+                    <TableCell align="right">{row.email}</TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
             <TableFooter>
               <TableRow>
                 <TablePagination
                   rowsPerPageOptions={[5, 10, 20]}
-                  colSpan={3}
-                  count={data.totalCount}
+                  count={data?.totalCount ?? 0}
                   rowsPerPage={pageSize}
                   page={page}
-                  slotProps={{
-                    select: {
-                      inputProps: {
-                        "aria-label": "rows per page",
-                      },
-                      native: true,
-                    },
-                  }}
                   onPageChange={handleChangePage}
                   onRowsPerPageChange={handleChangeRowsPerPage}
                 />
