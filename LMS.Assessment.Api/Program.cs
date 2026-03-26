@@ -1,3 +1,4 @@
+using Bogus;
 using LMS.Assessment.Api.Abstractions;
 using LMS.Assessment.Api.Entities;
 using LMS.Assessment.Api.Infrastructure;
@@ -22,6 +23,8 @@ builder.Services.AddSingleton<IRepository<Document>, InMemoryRepository<Document
 
 var app = builder.Build();
 
+await SeedLawFirms(app);
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -37,3 +40,22 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+static async Task SeedLawFirms(WebApplication app)
+{
+    var lawFirmRepo = app.Services.GetRequiredService<IRepository<LawFirm>>();
+
+    var lawFirmFaker = new Faker<LawFirm>()
+        .CustomInstantiator(f => new LawFirm(
+            Guid.NewGuid(),
+            f.Company.CompanyName(),
+            f.Address.FullAddress(),
+            f.Phone.PhoneNumber(),
+            f.Internet.Email(),
+            Guid.NewGuid()));
+
+    foreach (var lawFirm in lawFirmFaker.Generate(50))
+    {
+        await lawFirmRepo.CreateAsync(lawFirm);
+    }
+}
