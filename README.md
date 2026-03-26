@@ -41,3 +41,9 @@ cd lms-assessment-ui
 npm i
 npm run dev
 ```
+
+## Assessment Tasks
+
+1. Talk through how you'd improve the codebase.
+2. Fix the law firm paging bug on the UI.
+3. Sort `GET /lawfirms` by newest first. Test it in the UI by creating a new law firm.
