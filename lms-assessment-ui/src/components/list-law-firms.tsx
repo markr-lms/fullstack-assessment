@@ -10,6 +10,7 @@ import Paper from "@mui/material/Paper";
 import useApi from "~/hooks/useApi";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import TableHead from "@mui/material/TableHead";
 
 export default function ListLawFirms() {
   const [page, setPage] = useState(1);
@@ -44,6 +45,13 @@ export default function ListLawFirms() {
       {status === "success" && data.totalCount > 0 && (
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 500 }}>
+            <TableHead>
+              <TableRow>
+                <TableCell>Name</TableCell>
+                <TableCell align="right">Phone number</TableCell>
+                <TableCell align="right">Email</TableCell>
+              </TableRow>
+            </TableHead>
             <TableBody>
               {data.items.map((row) => (
                 <TableRow key={row.name}>

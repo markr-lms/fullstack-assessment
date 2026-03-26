@@ -34,6 +34,7 @@ export default function CreateLawFirmForm() {
 
   return (
     <section id="add-firm">
+      <h2>Add Law Firm</h2>
       <TextField
         fullWidth
         id="name"

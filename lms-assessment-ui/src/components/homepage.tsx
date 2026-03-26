@@ -10,10 +10,9 @@ function Homepage() {
       <header>
         <h1>LMS.Assessment</h1>
       </header>
-      <Stack component="main" spacing={2}>
-        <CreateLawFirmForm />
-        <Divider />
+      <Stack component="main" spacing={4}>
         <ListLawFirms />
+        <CreateLawFirmForm />
       </Stack>
     </Container>
   );

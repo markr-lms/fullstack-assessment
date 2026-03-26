@@ -21,7 +21,11 @@ public class InMemoryRepository<T> : IRepository<T> where T : IEntity
         if (pageSize < 1) throw new ArgumentOutOfRangeException(nameof(pageSize), "Page size must be at least 1.");
 
         var all = _store.Values.ToList();
-        var items = all.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+
+        var items = all
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToList();
 
         await SimulateDbOperation();
         return new PaginatedList<T>(items, all.Count, pageNumber, pageSize);
