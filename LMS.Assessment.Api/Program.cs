@@ -45,7 +45,7 @@ static async Task SeedLawFirms(WebApplication app)
 {
     var lawFirmRepo = app.Services.GetRequiredService<IRepository<LawFirm>>();
 
-    var lawFirmFaker = new Faker<LawFirm>()
+    var lawFirmFaker = new Faker<LawFirm>("en_GB")
         .CustomInstantiator(f => new LawFirm(
             Guid.NewGuid(),
             f.Company.CompanyName(),
