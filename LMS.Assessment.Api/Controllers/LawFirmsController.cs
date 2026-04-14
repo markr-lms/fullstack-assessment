@@ -1,7 +1,8 @@
-using LMS.Assessment.Api.Abstractions;
+using Bogus;
 using LMS.Assessment.Api.Dtos;
 using LMS.Assessment.Api.Entities;
 using LMS.Assessment.Api.Helpers;
+using LMS.Assessment.Api.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LMS.Assessment.Api.Controllers;
@@ -10,11 +11,17 @@ namespace LMS.Assessment.Api.Controllers;
 [Route("[controller]")]
 public class LawFirmsController : ControllerBase
 {
-    private readonly IRepository<LawFirm> _repository;
+    private readonly InMemoryRepository<LawFirm> _repository;
 
-    public LawFirmsController(IRepository<LawFirm> repository)
+    public LawFirmsController(LawFirm[]? seedLawFirmData = null)
     {
-        _repository = repository;
+        _repository = new InMemoryRepository<LawFirm>();
+        var lawFirmsToSeed = seedLawFirmData ?? GenerateFakeLawFirms();
+
+        foreach (var lawFirm in lawFirmsToSeed)
+        {
+            _repository.CreateAsync(lawFirm);
+        }
     }
 
     [HttpGet]
@@ -62,5 +69,22 @@ public class LawFirmsController : ControllerBase
         {
             return NotFound();
         }
+    }
+
+    private static LawFirm[] GenerateFakeLawFirms()
+    {
+        var lawFirmFaker = new Faker<LawFirm>("en_GB")
+            .CustomInstantiator(f => new LawFirm(
+                Guid.NewGuid(),
+                f.Company.CompanyName(),
+                f.Address.FullAddress(),
+                f.Phone.PhoneNumber(),
+                f.Internet.Email(),
+                Guid.NewGuid())
+            {
+                CreatedAt = f.Date.Past(1)
+            });
+
+        return [.. lawFirmFaker.Generate(50)];
     }
 }
