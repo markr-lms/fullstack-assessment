@@ -2,7 +2,6 @@ using LMS.Assessment.Api.Abstractions;
 using LMS.Assessment.Api.Controllers;
 using LMS.Assessment.Api.Dtos;
 using LMS.Assessment.Api.Entities;
-using LMS.Assessment.Api.Infrastructure;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,14 +17,9 @@ public class LawFirmsControllerTests
         "acme@law.com",
         Guid.NewGuid());
 
-    private static async Task<LawFirmsController> CreateSut(params LawFirm[] seed)
+    private static async Task<LawFirmsController> CreateSut(params LawFirm[] seedLawFirmData)
     {
-        var repo = new InMemoryRepository<LawFirm>();
-
-        foreach (var firm in seed)
-            await repo.CreateAsync(firm);
-
-        var controller = new LawFirmsController(repo)
+        var controller = new LawFirmsController(seedLawFirmData)
         {
             ControllerContext = new ControllerContext()
         };

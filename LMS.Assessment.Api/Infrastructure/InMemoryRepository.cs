@@ -3,7 +3,7 @@ using LMS.Assessment.Api.Abstractions;
 
 namespace LMS.Assessment.Api.Infrastructure;
 
-public class InMemoryRepository<T> : IRepository<T> where T : IEntity
+public class InMemoryRepository<T> where T : IEntity
 {
     private readonly ConcurrentDictionary<Guid, T> _store = new();
 
