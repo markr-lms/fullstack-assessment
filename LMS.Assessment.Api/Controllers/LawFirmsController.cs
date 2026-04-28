@@ -49,28 +49,6 @@ public class LawFirmsController : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
     }
 
-    [HttpPut("{id}")]
-    public async Task<IActionResult> Update(Guid id, UpdateLawFirmRequest lawFirm)
-    {
-        if (id != lawFirm.Id)
-            return BadRequest("Id in the URL does not match the Id in the body.");
-
-        if (Request.GetUserId() is not Guid userId)
-            return Unauthorized("User ID is missing from the request.");
-
-        var entity = lawFirm.ToEntity(userId);
-
-        try
-        {
-            var updated = await _repository.UpdateAsync(entity);
-            return Ok(updated);
-        }
-        catch (KeyNotFoundException)
-        {
-            return NotFound();
-        }
-    }
-
     private static LawFirm[] GenerateFakeLawFirms()
     {
         var lawFirmFaker = new Faker<LawFirm>("en_GB")
