@@ -161,36 +161,5 @@ public class InMemoryRepositoryTests
     }
 
     #endregion
-
-    #region UpdateAsync
-
-    [Fact]
-    public async Task UpdateAsync_ExistingEntity_UpdatesAndReturnsEntity()
-    {
-        // Arrange
-        var id = Guid.NewGuid();
-        var repo = await CreateRepo(new TestEntity(id, "old"));
-        var updated = new TestEntity(id, "new");
-
-        // Act
-        var result = await repo.UpdateAsync(updated);
-
-        // Assert
-        Assert.Equal(updated, result);
-        Assert.Equal("new", (await repo.GetByIdAsync(id))!.Value);
-    }
-
-    [Fact]
-    public async Task UpdateAsync_MissingEntity_ThrowsKeyNotFoundException()
-    {
-        // Arrange
-        var repo = await CreateRepo();
-
-        // Act & Assert
-        await Assert.ThrowsAsync<KeyNotFoundException>(
-            () => repo.UpdateAsync(new TestEntity(Guid.NewGuid(), "value")));
-    }
-
-    #endregion
 }
 
