@@ -40,17 +40,6 @@ public class InMemoryRepository<T> where T : IEntity
         return entity;
     }
 
-    public async Task<T> UpdateAsync(T entity)
-    {
-        if (!_store.ContainsKey(entity.Id))
-            throw new KeyNotFoundException($"No entity with id '{entity.Id}' was found.");
-
-        _store[entity.Id] = entity;
-
-        await SimulateDbOperation();
-        return entity;
-    }
-
     private static async Task SimulateDbOperation()
     {
         // Simulate some latency to mimic a real database operation
